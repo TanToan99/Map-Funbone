@@ -8,6 +8,7 @@ public class PlayerMoveScript : MonoBehaviour
     private Animator anim;
     private bool playerMoving;
     private Rigidbody2D body;
+    private 
 
     // Use this for initialization
     void Start ()  {
