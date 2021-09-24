@@ -83,21 +83,19 @@ namespace Photon.Realtime
         {
             Type websocketType = null;
             #if (UNITY_XBOXONE || UNITY_GAMECORE) && !UNITY_EDITOR
-            websocketType = Type.GetType("ExitGames.Client.Photon.SocketNativeSource, Assembly-CSharp", false);
+            websocketType = Type.GetType("ExitGames.Client.Photon.SocketNativeSource, PhotonRealtime", false);
             if (websocketType == null)
             {
                 websocketType = Type.GetType("ExitGames.Client.Photon.SocketNativeSource, Assembly-CSharp-firstpass", false);
             }
             if (websocketType == null)
             {
-                websocketType = Type.GetType("ExitGames.Client.Photon.SocketNativeSource, PhotonRealtime", false);
+                websocketType = Type.GetType("ExitGames.Client.Photon.SocketNativeSource, Assembly-CSharp", false);
             }
             if (websocketType == null)
             {
                 UnityEngine.Debug.LogError("XBOX is defined but peer could not find SocketNativeSource. Check your project files to make sure the native WSS implementation is available. Won't connect.");
             }
-            
-            this.SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(websocketType);    // on Xbox, the native socket plugin will support UDP and WSS (set below)
             #else
             // to support WebGL export in Unity, we find and assign the SocketWebTcp class (if it's in the project).
             // alternatively class SocketWebTcp might be in the Photon3Unity3D.dll
@@ -368,11 +366,11 @@ namespace Photon.Realtime
                     op[ParameterCode.PlayerProperties] = opParams.PlayerProperties;
                 }
                 op[ParameterCode.Broadcast] = true; // broadcast actor properties
-            }
 
-            if (opParams.OnGameServer || opParams.JoinMode == JoinMode.CreateIfNotExists)
-            {
-                this.RoomOptionsToOpParameters(op, opParams.RoomOptions);
+                if (opParams.JoinMode == JoinMode.CreateIfNotExists)
+                {
+                    this.RoomOptionsToOpParameters(op, opParams.RoomOptions);
+                }
             }
 
             //this.Listener.DebugReturn(DebugLevel.INFO, "OpJoinRoom: " + SupportClass.DictionaryToString(op));
