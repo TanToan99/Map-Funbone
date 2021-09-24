@@ -75,8 +75,6 @@ namespace Photon.Chat.Demo
         private readonly Dictionary<string,FriendItem> friendListItemLUT =  new Dictionary<string, FriendItem>();
 
         public bool ShowState = true;
-        public GameObject Title;
-        public Text StateText; // set in inspector
         public Text UserIdText; // set in inspector
 
         // private static string WelcomeText = "Welcome to chat. Type \\help to list commands.";
@@ -118,10 +116,7 @@ namespace Photon.Chat.Demo
             DontDestroyOnLoad(this.gameObject);
 
             this.UserIdText.text = "";
-            this.StateText.text  = "";
-            this.StateText.gameObject.SetActive(true);
             this.UserIdText.gameObject.SetActive(true);
-            this.Title.SetActive(true);
             this.ChatPanel.gameObject.SetActive(false);
             this.ConnectingLabel.SetActive(false);
 
@@ -156,7 +151,6 @@ namespace Photon.Chat.Demo
             this.chatClient.AuthValues = new AuthenticationValues(this.UserName);
             this.chatClient.ConnectUsingSettings(this.chatAppSettings);
 
-            this.ChannelToggleToInstantiate.gameObject.SetActive(false);
             Debug.Log("Connecting as: " + this.UserName);
 
             this.ConnectingLabel.SetActive(true);
@@ -186,15 +180,6 @@ namespace Photon.Chat.Demo
             {
                 this.chatClient.Service(); // make sure to call this regularly! it limits effort internally, so calling often is ok!
             }
-
-            // check if we are missing context, which means we got kicked out to get back to the Photon Demo hub.
-            if ( this.StateText == null)
-            {
-                Destroy(this.gameObject);
-                return;
-            }
-
-            this.StateText.gameObject.SetActive(this.ShowState); // this could be handled more elegantly, but for the demo it's ok.
         }
 
 
@@ -411,7 +396,6 @@ namespace Photon.Chat.Demo
             // use OnConnected() and OnDisconnected()
             // this method might become more useful in the future, when more complex states are being used.
 
-            this.StateText.text = state.ToString();
         }
 
         public void OnSubscribed(string[] channels, bool[] results)
